@@ -1,14 +1,33 @@
 {
-  "clickable_minimum_required": "6.0.2",
+  "clickable_minimum_required": "6.4",
   "template": "custom",
   "kill": "pure-maps",
-  "build": "cd $ROOT && make platform-ubports && make FULLNAME=pure-maps.jonnius PREFIX=. DESTDIR=$INSTALL_DIR/ INCLUDE_GPXPY=yes QT_PLATFORM_STYLE=suru TMP_AS_CACHE=yes install && cp $ROOT/packaging/ubports/pure-maps.desktop $INSTALL_DIR/share/applications",
-  "prebuild": "cd $ROOT && tools/manage-keys inject .",
-  "postbuild": "cd $ROOT && tools/manage-keys strip . && $ROOT/packaging/ubports/install-deps.sh $ARCH_TRIPLET",
   "build_dir": "build_ubports/$ARCH_TRIPLET/pure-maps",
   "install_dir": "$BUILD_DIR/click",
   "scripts": {
     "prepare-deps": "$ROOT/packaging/ubports/prepare-deps.sh"
+  },
+  "prebuild": "cd $ROOT && tools/manage-keys inject .",
+  "build": "cd $ROOT && make platform-ubports && make FULLNAME=pure-maps.jonnius PREFIX=. DESTDIR=$INSTALL_DIR/ INCLUDE_GPXPY=yes QT_PLATFORM_STYLE=suru TMP_AS_CACHE=yes install",
+  "postbuild": "cd $ROOT && tools/manage-keys strip .",
+  "install_bin": [
+    "$INSTALL_DIR/bin/*",
+    "$qmlrunner_LIB_INSTALL_DIR/usr/local/bin/qmlrunner",
+    "$mimic_LIB_INSTALL_DIR/bin/mimic",
+    "$picotts_LIB_INSTALL_DIR/usr/bin/pico2wave"
+  ],
+  "install_lib": [
+    "$mapbox-gl-native_LIB_INSTALL_DIR/usr/lib/$ARCH_TRIPLET/*.so*",
+    "$mapbox-gl-qml_LIB_INSTALL_DIR/usr/lib/$ARCH_TRIPLET/qt5/qml/*",
+    "$nemo-qml-plugin-dbus_LIB_INSTALL_DIR/usr/lib/$ARCH_TRIPLET/qt5/qml/*",
+    "$nemo-qml-plugin-dbus_LIB_INSTALL_DIR/usr/lib/*.so*"
+  ],
+  "install_data": {
+    "$ROOT/packaging/ubports/manifest.json": "$INSTALL_DIR",
+    "$ROOT/packaging/ubports/pure-maps.apparmor": "$INSTALL_DIR",
+    "$ROOT/packaging/ubports/pure-maps.svg": "$INSTALL_DIR",
+    "$ROOT/packaging/ubports/pure-maps.desktop": "$INSTALL_DIR",
+    "$picotts_LIB_INSTALL_DIR/usr/share/picotts": "$INSTALL_DIR/usr/share"
   },
   "libraries": {
     "mapbox-gl-native": {
@@ -35,7 +54,7 @@
     "mimic": {
       "build_dir": "build_ubports/$ARCH_TRIPLET/$NAME",
       "template": "custom",
-      "build": "cp -r $SRC_DIR/* $BUILD_DIR && cd $BUILD_DIR && ./autogen.sh && ./configure --with-audio=none --prefix=\"$INSTALL_DIR\" --exec-prefix=\"$INSTALL_DIR\" --host=$ARCH_TRIPLET && make -j4 &&  make install",
+      "build": "cp -r $SRC_DIR/* $BUILD_DIR && cd $BUILD_DIR && ./autogen.sh && ./configure --with-audio=none --prefix=\"$INSTALL_DIR\" --exec-prefix=\"$INSTALL_DIR\" --host=$ARCH_TRIPLET && make -j4 &&  make install && $ARCH_TRIPLET-strip -s $INSTALL_DIR/bin/mimic",
       "dependencies_target": [
         "libtool",
         "libasound2-dev",
