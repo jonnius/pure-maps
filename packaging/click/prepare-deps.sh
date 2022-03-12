@@ -20,7 +20,7 @@ rm -rf $MAPBOX_GL_NATIVE_SRC_DIR $MAPBOX_GL_QML_SRC_DIR $QMLRUNNER_SRC_DIR $MIMI
 
 # Download sources
 git clone -b mapbox-update-200607 ${CLONE_ARGS} https://github.com/rinigus/mapbox-gl-native.git $MAPBOX_GL_NATIVE_SRC_DIR
-git clone -b 1.7.5 ${CLONE_ARGS} https://github.com/rinigus/mapbox-gl-qml.git $MAPBOX_GL_QML_SRC_DIR
+git clone -b 2.0.1 ${CLONE_ARGS} https://github.com/rinigus/mapbox-gl-qml.git $MAPBOX_GL_QML_SRC_DIR
 git clone -b 1.0.2 ${CLONE_ARGS} https://github.com/rinigus/qmlrunner.git $QMLRUNNER_SRC_DIR
 git clone -b 0.9.0+git2 ${CLONE_ARGS} https://github.com/rinigus/s2geometry.git $S2GEOMETRY_SRC_DIR
 
