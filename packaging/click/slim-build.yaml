@@ -22,9 +22,9 @@ dependencies_ppa:
 dependencies_host:
 - cmake
 
+install_qml:
+- ${MAPBOX_GL_QML_LIB_INSTALL_DIR}/usr/lib/${ARCH_TRIPLET}/qt5/qml/MapboxMap
 install_lib:
-- ${MAPLIBRE_GL_NATIVE_LIB_INSTALL_DIR}/lib/*.so*
-- ${MAPBOX_GL_QML_LIB_INSTALL_DIR}/usr/lib/${ARCH_TRIPLET}/qt5/qml/*
 - ${S2GEOMETRY_LIB_INSTALL_DIR}/lib/*.so*
 install_bin:
 - ${PICOTTS_LIB_INSTALL_DIR}/usr/bin/pico2wave
@@ -44,7 +44,7 @@ libraries:
     - -DMBGL_WITH_WERROR=OFF
     - -DMBGL_WITH_QT_HEADLESS=OFF
     - -DMBGL_QT_LIBRARY_ONLY=ON
-    - -DMBGL_QT_STATIC=OFF
+    - -DMBGL_QT_STATIC=ON
 
     # Hack: Update build tools from focal repos
     image_setup:
@@ -61,19 +61,13 @@ libraries:
 
   mapbox-gl-qml:
     builder: cmake
+    build_args:
+    - -DCMAKE_CXX_STANDARD=14
 
-    # Hack: Update build tools from focal repos
-    image_setup:
-      run:
-      - sed -i 's/ubuntu xenial/ubuntu focal/g' /etc/apt/sources.list
-      - sed -i 's/ubuntu-ports xenial/ubuntu-ports focal/g' /etc/apt/sources.list
-      - apt-get update
-      - apt-get install -y cmake libcurl4
-      - if [ -n "${DEB_TARGET_ARCH+1}" ]; then \
-          apt install -y g++-$DEB_TARGET_MULTIARCH; \
-        else \
-          apt install -y g++; \
-        fi
+    dependencies_ppa:
+    - ppa:janisozaur/cmake-update
+    dependencies_host:
+    - cmake
 
   s2geometry:
     builder: cmake
