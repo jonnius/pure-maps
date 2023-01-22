@@ -1,0 +1,13 @@
+name: Pure Maps Pipeline
+
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - 'v*'
+  pull_request:
+
+jobs:
+  click-packaging:
+    uses: ./.github/workflows/click.yaml

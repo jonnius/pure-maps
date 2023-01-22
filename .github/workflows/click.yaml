@@ -1,0 +1,155 @@
+name: Ubuntu Touch click package pipeline
+
+on:
+  workflow_call:
+
+jobs:
+  package-click-armhf:
+    name: Package as armhf click
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+        with:
+          submodules: 'true'
+
+      - name: Download dependencies
+        run: ENABLE_MIMIC=1 ./packaging/click/prepare-deps.sh
+
+      - name: Build and package
+        uses: docker://clickable/ci-20.04-armhf:7.10.0
+        with:
+          args: clickable build --all --config packaging/click/full-build.yaml
+
+      - name: Upload the built click artifact (armhf)
+        uses: actions/upload-artifact@v3
+        with:
+          name: Pure-Maps-Click
+          path: build/arm-linux-gnueabihf/app/pure-maps.jonnius_*_armhf.click
+          retention-days: 1
+
+  package-click-arm64:
+    name: Package as arm64 click
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+        with:
+          submodules: 'true'
+
+      - name: Download dependencies
+        run: ENABLE_MIMIC=1 ./packaging/click/prepare-deps.sh
+
+      - name: Build and package
+        uses: docker://clickable/ci-20.04-arm64:7.10.0
+        with:
+          args: clickable build --all --config packaging/click/full-build.yaml
+
+      - name: Upload the built click artifact (arm64)
+        uses: actions/upload-artifact@v3
+        with:
+          name: Pure-Maps-Click
+          path: build/aarch64-linux-gnu/app/pure-maps.jonnius_*_arm64.click
+          retention-days: 1
+
+  package-click-amd64:
+    name: Package as amd64 click
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+        with:
+          submodules: 'true'
+
+      - name: Download dependencies
+        run: ENABLE_MIMIC=1 ./packaging/click/prepare-deps.sh
+
+      - name: Build and package
+        uses: docker://clickable/ci-20.04-amd64:7.10.0
+        with:
+          args: clickable build --all --config packaging/click/full-build.yaml
+
+      - name: Upload the built click artifact (amd64)
+        uses: actions/upload-artifact@v3
+        with:
+          name: Pure-Maps-Click
+          path: build/x86_64-linux-gnu/app/pure-maps.jonnius_*_amd64.click
+          retention-days: 1
+
+  package-click-slim-armhf:
+    name: Package as armhf click
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+        with:
+          submodules: 'true'
+
+      - name: Download dependencies
+        run: ENABLE_MIMIC=0 ./packaging/click/prepare-deps.sh
+
+      - name: Build and package
+        uses: docker://clickable/ci-20.04-armhf:7.10.0
+        with:
+          args: clickable build --all --config packaging/click/slim-build.yaml
+
+      - name: Upload the built click artifact (armhf)
+        uses: actions/upload-artifact@v3
+        with:
+          name: Pure-Maps-Click
+          path: build/arm-linux-gnueabihf/app/pure-maps-slim.jonnius_*_armhf.click
+          retention-days: 1
+
+  package-click-slim-arm64:
+    name: Package as arm64 click
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+        with:
+          submodules: 'true'
+
+      - name: Download dependencies
+        run: ENABLE_MIMIC=0 ./packaging/click/prepare-deps.sh
+
+      - name: Build and package
+        uses: docker://clickable/ci-20.04-arm64:7.10.0
+        with:
+          args: clickable build --all --config packaging/click/slim-build.yaml
+
+      - name: Upload the built click artifact (arm64)
+        uses: actions/upload-artifact@v3
+        with:
+          name: Pure-Maps-Click
+          path: build/aarch64-linux-gnu/app/pure-maps-slim.jonnius_*_arm64.click
+          retention-days: 1
+
+  package-click-slim-amd64:
+    name: Package as amd64 click
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+        with:
+          submodules: 'true'
+
+      - name: Download dependencies
+        run: ENABLE_MIMIC=0 ./packaging/click/prepare-deps.sh
+
+      - name: Build and package
+        uses: docker://clickable/ci-20.04-amd64:7.10.0
+        with:
+          args: clickable build --all --config packaging/click/slim-build.yaml
+
+      - name: Upload the built click artifact (amd64)
+        uses: actions/upload-artifact@v3
+        with:
+          name: Pure-Maps-Click
+          path: build/x86_64-linux-gnu/app/pure-maps-slim.jonnius_*_amd64.click
+          retention-days: 1
